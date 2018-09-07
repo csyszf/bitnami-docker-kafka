@@ -7,9 +7,13 @@ USER=kafka
 KAFKA_HOME="/opt/bitnami/kafka"
 START_COMMAND="${KAFKA_HOME}/bin/kafka-server-start.sh -daemon ${KAFKA_HOME}/config/server.properties && ps ax | grep -i 'java.*kafka' | grep -v grep | awk '{print \$1}'  > ${KAFKA_HOME}/tmp/kafka.pid  && tail -f ${KAFKA_HOME}/logs/server.log"
 
+echo KAFKA_BROKER_ID=$KAFKA_BROKER_ID
+echo BROKER_ID_COMMAND=$BROKER_ID_COMMAND
+
 if [[ -z "$KAFKA_BROKER_ID" ]]; then
     if [[ -n "$BROKER_ID_COMMAND" ]]; then
         export KAFKA_BROKER_ID=$(eval $BROKER_ID_COMMAND)
+        echo set KAFKA_BROKER_ID to $KAFKA_BROKER_ID by command $BROKER_ID_COMMAND
     else
         # By default auto allocate broker ID
         export KAFKA_BROKER_ID=-1
